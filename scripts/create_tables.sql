@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS public.perfil
 (
     id_perfil integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
     id_usuario integer,
-    id_instituicao integer,
+    id_curso integer,
     id_permissao integer,
     CONSTRAINT perfil_pkey PRIMARY KEY (id_perfil)
 );
@@ -202,8 +202,8 @@ ALTER TABLE IF EXISTS public.intervencao
 
 
 ALTER TABLE IF EXISTS public.perfil
-    ADD CONSTRAINT perfil_id_instituicao_fkey FOREIGN KEY (id_instituicao)
-    REFERENCES public.instituicao (cod_mec) MATCH SIMPLE
+    ADD CONSTRAINT perfil_id_curso_fkey FOREIGN KEY (id_curso)
+    REFERENCES public.curso (id_curso) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION;
 
