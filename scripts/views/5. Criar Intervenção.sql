@@ -4,7 +4,7 @@ SELECT
 	STRING_AGG(c.nome, ', ') AS curso,
 	COALESCE(STRING_AGG(g.titulo, ', '), 'Sem grupo de intervenção') AS grupos,
 	e.data_ingresso AS ingresso,
-	ed.semestre || '/' || c.total_semestres AS qtd_semestres,
+	ed.semestre || '/' || c.total_periodos AS qtd_semestres,
 	ed.turmas
 FROM estatisticas_desempenho ed
 	INNER JOIN estudante e ON ed.id_estudante = e.id
