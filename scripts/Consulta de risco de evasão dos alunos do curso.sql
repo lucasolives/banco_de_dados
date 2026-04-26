@@ -10,4 +10,4 @@ SELECT
 	ed.maior_influencia_evasao,
 	ed.turmas
 FROM estatisticas_desempenho ed
-INNER JOIN estudante e ON ed.id_estudante = e.matricula
+INNER JOIN estudante e ON ed.id_estudante = e.id
