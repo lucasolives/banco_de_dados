@@ -1,0 +1,27 @@
+SELECT
+	g.titulo,
+	g.semestre,
+	COUNT(e.id) AS estudantes,
+	TO_CHAR(g.data_criacao, 'DD/MM/YYYY') AS criacao,
+	g.observacao,
+	p.nome || ' de ' || c.nome AS autoria,
+	CASE 
+        WHEN g.ativo IS TRUE THEN 'Ativo'
+        WHEN g.ativo IS FALSE THEN 'Inativo'
+    END AS status
+FROM grupo g
+	LEFT JOIN estudante_grupo eg ON g.id = eg.id_grupo
+	LEFT JOIN estudante e ON eg.id_estudante = e.id
+	INNER JOIN usuario u ON g.id_usuario = u.id
+	LEFT JOIN usuario_curso uc ON u.id = uc.id_usuario
+	LEFT JOIN curso c ON uc.id_curso= c.id
+	INNER JOIN perfil p ON u.id_perfil = p.id
+GROUP BY
+	g.titulo,
+	g.semestre,
+	e.id,
+	g.data_criacao,
+	g.observacao,
+	p.nome,
+	c.nome,
+	g.ativo;
