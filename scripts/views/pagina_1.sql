@@ -1,6 +1,17 @@
-SELECT usuario.nome, usuario.email, permissoes_usuario.cargo, curso.nome, usuario.ultimo_acesso
-FROM perfil
-INNER JOIN usuario ON usuario.id_usuario = perfil.id_usuario
-INNER JOIN permissoes_usuario ON permissoes_usuario.id_permissao = perfil.id_permissao
-INNER JOIN curso ON curso.id_curso = perfil.id_curso
-WHERE curso.id_instituicao = 200;
+SELECT
+	u.nome,
+	u.email,
+	p.nome,
+	STRING_AGG(c.nome, ', ') AS curso,
+	u.ultimo_acesso
+FROM usuario u
+	INNER JOIN perfil p ON p.id = u.id_perfil
+	LEFT JOIN usuario_curso uc ON u.id = uc.id_usuario
+	LEFT JOIN curso c ON uc.id_curso= c.id
+	INNER JOIN instituicao i ON i.cod_MEC = u.id_instituicao
+WHERE u.id_instituicao = 1
+GROUP BY
+	u.nome,
+	u.email,
+	p.nome,
+	u.ultimo_acesso
