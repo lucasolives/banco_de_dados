@@ -3,7 +3,7 @@ SELECT
 	e.nome,
 	STRING_AGG(c.nome, ', ') AS curso,
 	COALESCE(STRING_AGG(g.titulo, ', '), 'Sem grupo de intervenção') AS grupos,
-	e.data_ingresso AS ingresso,
+	TO_CHAR(e.data_ingresso, 'DD/MM/YYYY') AS ingresso,
 	ed.semestre || '/' || c.total_periodos AS qtd_semestres,
 	ed.turmas
 FROM estatisticas_desempenho ed
