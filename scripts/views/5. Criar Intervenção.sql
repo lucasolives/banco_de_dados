@@ -16,5 +16,5 @@ GROUP BY
 	e.nome,
 	e.data_ingresso,
 	ed.semestre,
-	c.total_semestres,
+	c.total_periodos,
 	ed.turmas;
