@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS public.instituicao
 (
     cod_mec integer NOT NULL,
     nome character varying(50) NOT NULL,
+    tipo character varying(20) NOT NULL,
     CONSTRAINT instituicao_pkey PRIMARY KEY (cod_mec)
 );
 
@@ -41,6 +42,7 @@ CREATE TABLE IF NOT EXISTS public.grupo
 (
     id SERIAL PRIMARY KEY,
 	id_usuario integer NOT NULL,
+	titulo character varying(50) NOT NULL,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     observacao character varying(100),
     semestre character varying(6) NOT NULL,
@@ -130,12 +132,20 @@ CREATE TABLE IF NOT EXISTS public.intervencao
 (
     id SERIAL PRIMARY KEY,
     id_usuario integer NOT NULL,
+    id_disciplina integer,
+	id_curso integer,
     data_intervencao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     semestre character varying(6) NOT NULL,
     forma character varying(50) NOT NULL,
     formato text,
     interacao text,
-    assunto character varying(50) NOT NULL
+    assunto character varying(50) NOT NULL,
+    tipo character varying(20) NOT NULL CHECK (tipo IN ('Conteudo', 'Acolhimento', 'Outro')),
+    acompanhamento character varying(10) NOT NULL CHECK (acompanhamento IN ('Assincrono', 'Sincrono')),
+    objetivo_alcancado character varying(15) NOT NULL CHECK (objetivo_alcancado IN ('Sim', 'Nao', 'Parcialmente')),
+    observacao text,
+    duracao integer,
+    encaminhar_para character varying(200)
 );
 
 CREATE TABLE IF NOT EXISTS public.estudante_intervencao
@@ -247,6 +257,18 @@ ALTER TABLE IF EXISTS public.intervencao
     REFERENCES public.usuario (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE CASCADE;
+
+ALTER TABLE IF EXISTS public.intervencao
+    ADD CONSTRAINT intervencao_id_disciplina_fkey FOREIGN KEY (id_disciplina)
+    REFERENCES public.disciplina (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE SET NULL;
+
+ALTER TABLE IF EXISTS public.intervencao
+	ADD CONSTRAINT intervencao_id_curso_fkey FOREIGN KEY (id_curso)
+	REFERENCES public.curso (id) MATCH SIMPLE
+	ON UPDATE NO ACTION
+	ON DELETE CASCADE;
 
 ALTER TABLE IF EXISTS public.estudante_intervencao
 	ADD CONSTRAINT estudante_intervencao_id_estudante_fkey FOREIGN KEY (id_estudante)
