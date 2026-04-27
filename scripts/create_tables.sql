@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS public.curso
     id SERIAL PRIMARY KEY,
     id_instituicao integer,
     id_unidade integer,
+	total_periodos integer,
     nome character varying(200) NOT NULL
 );
 
