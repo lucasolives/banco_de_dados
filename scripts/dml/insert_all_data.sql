@@ -10,8 +10,8 @@ INSERT INTO perfil (id_permissao, nome)
 VALUES (1, 'Coordenador de Curso'),
 	   (2, 'Tutor'),
 	   (3, 'Coordenador de Ensino'),
-	   (4, 'Coordenador de Unidade'),
-	   (5, 'Público');
+	   (3, 'Coordenador de Unidade'),
+	   (4, 'Público');
 
 -- Instituições
 INSERT INTO instituicao (cod_mec, nome, tipo)
