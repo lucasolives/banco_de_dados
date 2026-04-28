@@ -9,7 +9,6 @@ FROM usuario u
 	LEFT JOIN usuario_curso uc ON u.id = uc.id_usuario
 	LEFT JOIN curso c ON uc.id_curso= c.id
 	INNER JOIN instituicao i ON i.cod_MEC = u.id_instituicao
-WHERE u.id_instituicao = 1
 GROUP BY
 	u.nome,
 	u.email,
