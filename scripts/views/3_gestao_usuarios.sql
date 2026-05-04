@@ -1,5 +1,5 @@
 SELECT
-	u.nome AS nome,
+	u.nome,
 	u.email AS email_institucional,
 	p.nome AS perfil,
 	STRING_AGG(c.nome, ', ') AS curso,
