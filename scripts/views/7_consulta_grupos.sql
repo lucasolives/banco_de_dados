@@ -8,7 +8,6 @@ SELECT
     COUNT(DISTINCT mg.id_matricula) AS estudantes,
     TO_CHAR(g.data_criacao, 'DD/MM/YYYY') AS criacao,
     g.observacao,
-    -- Lógica simples: Se houver curso, concatena ' de ' + lista. Se não, apenas o perfil.
     p.nome || COALESCE(
         (SELECT ' de ' || STRING_AGG(c.nome, ', ') 
          FROM usuario_curso uc 

@@ -13,4 +13,4 @@ GROUP BY
 	u.nome,
 	u.email,
 	p.nome,
-	u.ultimo_acesso
+	u.ultimo_acesso;
