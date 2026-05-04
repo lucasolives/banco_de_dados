@@ -93,12 +93,6 @@ CREATE TABLE IF NOT EXISTS public.turma
 CREATE TABLE IF NOT EXISTS public.estatisticas_desempenho
 (
     id SERIAL PRIMARY KEY,
-    id_estudante integer NOT NULL UNIQUE, 
-    media_global numeric(4, 2) NOT NULL,
-    semestre integer NOT NULL,
-    reprovacoes integer NOT NULL,
-    ch_semestre integer NOT NULL,
-    turmas integer NOT NULL,
     maior_influencia_evasao character varying(100) NOT NULL,
     semestre_saida integer,
     risco NUMERIC(3, 2) CHECK (risco >= 0 AND risco <= 1)
@@ -107,26 +101,35 @@ CREATE TABLE IF NOT EXISTS public.estatisticas_desempenho
 CREATE TABLE IF NOT EXISTS public.estudante
 (
     id SERIAL PRIMARY KEY,
-    id_instituicao integer NOT NULL,
-    id_curso integer NOT NULL,
-    matricula integer NOT NULL,
     nome character varying(50) NOT NULL,
-    data_ingresso date NOT NULL,
-    UNIQUE (id_instituicao, matricula)
+    email_institucional character varying(200) NOT NULL,
+    cpf character varying(50) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS public.estudante_grupo
+CREATE TABLE IF NOT EXISTS public.matricula
+(
+    id SERIAL PRIMARY KEY,
+    id_curso integer NOT NULL,
+    id_estudante integer NOT NULL,
+    id_estatisticas_desempenho integer NOT NULL,
+    matricula integer NOT NULL,
+    media_global numeric(4, 2) NOT NULL,
+    reprovacoes integer NOT NULL,
+    data_ingresso date NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS public.matricula_grupo
 (
     id_grupo integer NOT NULL,
-    id_estudante integer NOT NULL,
-    CONSTRAINT id_estudante_grupo PRIMARY KEY (id_estudante, id_grupo)
+    id_matricula integer NOT NULL,
+    CONSTRAINT id_matricula_grupo PRIMARY KEY (id_matricula, id_grupo)
 );
 
-CREATE TABLE IF NOT EXISTS public.estudante_turma
+CREATE TABLE IF NOT EXISTS public.matricula_turma
 (
     id_turma integer NOT NULL,
-    id_estudante integer NOT NULL,
-    CONSTRAINT id_estudante_turma PRIMARY KEY (id_estudante, id_turma)
+    id_matricula integer NOT NULL,
+    CONSTRAINT id_matricula_turma PRIMARY KEY (id_matricula, id_turma)
 );
 
 CREATE TABLE IF NOT EXISTS public.intervencao
@@ -149,11 +152,11 @@ CREATE TABLE IF NOT EXISTS public.intervencao
     encaminhar_para character varying(200)
 );
 
-CREATE TABLE IF NOT EXISTS public.estudante_intervencao
+CREATE TABLE IF NOT EXISTS public.matricula_intervencao
 (
-	id_estudante integer NOT NULL,
+	id_matricula integer NOT NULL,
 	id_intervencao integer NOT NULL,
-	CONSTRAINT id_estudante_intervencao PRIMARY KEY (id_estudante, id_intervencao)
+	CONSTRAINT id_matricula_intervencao PRIMARY KEY (id_matricula, id_intervencao)
 );
 
 -- Definição das foreign keys
@@ -211,44 +214,44 @@ ALTER TABLE IF EXISTS public.usuario_curso
     ON UPDATE NO ACTION
     ON DELETE CASCADE;
 
-ALTER TABLE IF EXISTS public.estatisticas_desempenho
-    ADD CONSTRAINT estatisticas_desempenho_id_estudante_fkey FOREIGN KEY (id_estudante)
-    REFERENCES public.estudante (id) MATCH SIMPLE
+ALTER TABLE IF EXISTS public.matricula
+    ADD CONSTRAINT matricula_id_estatisticas_desempenho_fkey FOREIGN KEY (id_estatisticas_desempenho)
+    REFERENCES public.estatisticas_desempenho (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE CASCADE;
 
-ALTER TABLE IF EXISTS public.estudante
-    ADD CONSTRAINT estudante_id_instituicao_fkey FOREIGN KEY (id_instituicao)
-    REFERENCES public.instituicao (cod_mec) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE CASCADE;
-
-ALTER TABLE IF EXISTS public.estudante
-    ADD CONSTRAINT estudante_id_curso_fkey FOREIGN KEY (id_curso)
+ALTER TABLE IF EXISTS public.matricula
+    ADD CONSTRAINT matricula_id_curso_fkey FOREIGN KEY (id_curso)
     REFERENCES public.curso (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE CASCADE;
 
-ALTER TABLE IF EXISTS public.estudante_grupo
-    ADD CONSTRAINT estudante_grupo_id_estudante_fkey FOREIGN KEY (id_estudante)
+ALTER TABLE IF EXISTS public.matricula
+    ADD CONSTRAINT matricula_id_estudante_fkey FOREIGN KEY (id_estudante)
     REFERENCES public.estudante (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE CASCADE;
 
-ALTER TABLE IF EXISTS public.estudante_grupo
-    ADD CONSTRAINT estudante_grupo_id_grupo_fkey FOREIGN KEY (id_grupo)
+ALTER TABLE IF EXISTS public.matricula_grupo
+    ADD CONSTRAINT matricula_grupo_id_matricula_fkey FOREIGN KEY (id_matricula)
+    REFERENCES public.matricula (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE CASCADE;
+
+ALTER TABLE IF EXISTS public.matricula_grupo
+    ADD CONSTRAINT matricula_grupo_id_grupo_fkey FOREIGN KEY (id_grupo)
     REFERENCES public.grupo (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE CASCADE;
 
-ALTER TABLE IF EXISTS public.estudante_turma
-    ADD CONSTRAINT estudante_turma_id_estudante_fkey FOREIGN KEY (id_estudante)
-    REFERENCES public.estudante (id) MATCH SIMPLE
+ALTER TABLE IF EXISTS public.matricula_turma
+    ADD CONSTRAINT matricula_turma_id_matricula_fkey FOREIGN KEY (id_matricula)
+    REFERENCES public.matricula (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE CASCADE;
 
-ALTER TABLE IF EXISTS public.estudante_turma
-    ADD CONSTRAINT estudante_turma_id_turma_fkey FOREIGN KEY (id_turma)
+ALTER TABLE IF EXISTS public.matricula_turma
+    ADD CONSTRAINT matricula_turma_id_turma_fkey FOREIGN KEY (id_turma)
     REFERENCES public.turma (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE CASCADE;
@@ -271,14 +274,14 @@ ALTER TABLE IF EXISTS public.intervencao
 	ON UPDATE NO ACTION
 	ON DELETE CASCADE;
 
-ALTER TABLE IF EXISTS public.estudante_intervencao
-	ADD CONSTRAINT estudante_intervencao_id_estudante_fkey FOREIGN KEY (id_estudante)
-	REFERENCES public.estudante (id) MATCH SIMPLE
+ALTER TABLE IF EXISTS public.matricula_intervencao
+	ADD CONSTRAINT matricula_intervencao_id_matricula_fkey FOREIGN KEY (id_matricula)
+	REFERENCES public.matricula (id) MATCH SIMPLE
 	ON UPDATE NO ACTION
 	ON DELETE CASCADE;
 
-ALTER TABLE IF EXISTS public.estudante_intervencao
-	ADD CONSTRAINT estudante_intervencao_id_intervencao_fkey FOREIGN KEY (id_intervencao)
+ALTER TABLE IF EXISTS public.matricula_intervencao
+	ADD CONSTRAINT matricula_intervencao_id_intervencao_fkey FOREIGN KEY (id_intervencao)
 	REFERENCES public.intervencao (id) MATCH SIMPLE
 	ON UPDATE NO ACTION
 	ON DELETE CASCADE;
