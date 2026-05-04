@@ -1,9 +1,9 @@
 SELECT
-	u.nome,
-	u.email,
-	p.nome,
+	u.nome AS nome,
+	u.email AS email_institucional,
+	p.nome AS perfil,
 	STRING_AGG(c.nome, ', ') AS curso,
-	u.ultimo_acesso
+	(CURRENT_TIMESTAMP - u.ultimo_acesso) AS ultimo_acesso
 FROM usuario u
 	INNER JOIN perfil p ON p.id = u.id_perfil
 	LEFT JOIN usuario_curso uc ON u.id = uc.id_usuario
