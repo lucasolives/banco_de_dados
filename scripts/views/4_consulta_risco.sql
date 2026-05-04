@@ -20,4 +20,4 @@ LEFT JOIN matricula_turma mt ON mt.id_matricula = m.id
 LEFT JOIN turma t ON t.id = mt.id_turma
 LEFT JOIN disciplina d ON d.id = t.id_disciplina
 GROUP BY ed.risco, ed.semestre_saida, m.id, e.nome, m.media_global,ed.maior_influencia_evasao, m.data_ingresso
-ORDER BY m.id;
+ORDER BY m.id
