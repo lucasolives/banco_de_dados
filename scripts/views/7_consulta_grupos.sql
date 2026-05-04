@@ -69,4 +69,16 @@ FROM intervencao i
     INNER JOIN matricula m ON mi.id_matricula = m.id
     INNER JOIN estudante e ON m.id_estudante = e.id
     INNER JOIN disciplina d ON i.id_disciplina = d.id
-WHERE i.id = 6;
+WHERE i.id = 6
+GROUP BY 
+    i.data_intervencao, 
+    i.semestre, 
+    d.nome, 
+    i.assunto, 
+    i.forma, 
+    i.formato, 
+    i.interacao, 
+    i.tipo, 
+    i.acompanhamento, 
+    i.duracao, 
+    i.objetivo_alcancado;
